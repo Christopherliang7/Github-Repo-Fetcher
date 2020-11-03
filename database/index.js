@@ -1,21 +1,14 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher');
-
-// Send yourself a notification if connection was sucessful or not
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function() {
-//   console.log('Successful Connection!')
-// });
+mongoose.connect('mongodb://localhost/fetcher', {useMongoClient: true});
 
 // once connection is created - create a schema to be derived by the model
 let repoSchema = mongoose.Schema({
-  id: Number, // repo Id
-  repo_name: String,
-  owner_name: String,
-  owner_id: Number,
-  url: String,
-  forks: String
+  id: {type: Number, unique: true},
+  repo_name: {type: String},
+  owner_name: {type: String},
+  owner_id: {type: Number},
+  url: {type: String},
+  forks: {type: String}
 });
 
 // once schema is created - compile schema into a model
@@ -29,6 +22,8 @@ let save = (repo) => {
   // create a new model repo
   // insert parameters into model based on repo given
   // save this repo into mongo database
+  console.log('Save function in progress!');
+  console.log('Save is running on: ', repo);
 
   let newRepo = new Repo({
     id: repo.id,
@@ -42,6 +37,7 @@ let save = (repo) => {
       console.log('Error in saving new repo to database.')
     } else {
       console.log('Success in saving new repo to database!')
+      console.log('This is saved data: ', data)
     }
   })
 }
