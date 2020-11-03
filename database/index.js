@@ -21,11 +21,29 @@ let repoSchema = mongoose.Schema({
 // once schema is created - compile schema into a model
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (/* TODO */) => {
+let save = (repo) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
 
+  // create a new model repo
+  // insert parameters into model based on repo given
+  // save this repo into mongo database
+
+  let newRepo = new Repo({
+    id: repo.id,
+    repo_name: repo.name,
+    owner_name: repo.owner.login,
+    owner_id: repo.owner.id,
+    url: repo.ownder.url,
+    forks: repo.forks
+  }).save((err, data) => {
+    if (err) {
+      console.log('Error in saving new repo to database.')
+    } else {
+      console.log('Success in saving new repo to database!')
+    }
+  })
 }
 
 module.exports.save = save;
