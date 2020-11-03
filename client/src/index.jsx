@@ -18,14 +18,26 @@ class App extends React.Component {
       url: '/repos',
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify(term),
-      success: function (data) {
-        console.log('Success with POST request! ', data);
+      data: JSON.stringify({username: term}),
+      success: () => {
+        // console.log('Successful POST request!') // upon success, send username to server to obtain github repos
+        // $.ajax({
+        //   url: '/repos',
+        //   type: 'GET',
+        //   contentType: 'application/json',
+        //   data: JSON.stringify({username: term}),
+        //   success: (data) => {
+        //     this.setState({repos: data})
+        //   },
+        //   error: (err) => {
+        //     console.log('Failed GET request!', err);
+        //   }
+        // });
       },
-      error: function(error) {
-        console.log('Error during POST request. ', error);
+      error: (err) => {
+        console.log('Failed POST request!', err);
       }
-    })
+    });
   }
 
   render () {
