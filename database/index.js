@@ -1,20 +1,22 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fetcher', {useMongoClient: true});
+// Took fetcher out and database works.
 
 // once connection is created - create a schema to be derived by the model
 let repoSchema = mongoose.Schema({
-  id: {type: Number, unique: true},
-  repo_name: {type: String},
-  owner_name: {type: String},
-  owner_id: {type: Number},
-  url: {type: String},
-  forks: {type: String}
+  id: Number,
+  repo_name: String,
+  owner_name: String,
+  owner_id: Number,
+  url: String,
+  description: String,
+  forks: String
 });
 
 // once schema is created - compile schema into a model
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (repo) => {
+let saveToDb = (repo) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
@@ -30,11 +32,16 @@ let save = (repo) => {
     repo_name: repo.name,
     owner_name: repo.owner.login,
     owner_id: repo.owner.id,
-    url: repo.ownder.url,
+    url: repo.owner.url,
+    description: repo.description,
     forks: repo.forks
-  }).save((err, data) => {
+  });
+
+  console.log('This is the new Repo: ', newRepo);
+
+  newRepo.save((err, data) => {
     if (err) {
-      console.log('Error in saving new repo to database.')
+      console.log('Error in saving new repo to database.', err);
     } else {
       console.log('Success in saving new repo to database!')
       console.log('This is saved data: ', data)
@@ -42,4 +49,4 @@ let save = (repo) => {
   })
 }
 
-module.exports.save = save;
+module.exports.saveToDb = saveToDb;
