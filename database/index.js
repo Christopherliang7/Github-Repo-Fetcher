@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fetcher', {useMongoClient: true});
+mongoose.connect('mongodb://localhost', {useMongoClient: true});
 // Took fetcher out and database works.
 
 // once connection is created - create a schema to be derived by the model
