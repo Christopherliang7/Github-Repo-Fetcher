@@ -1,6 +1,6 @@
 const express = require('express');
-const getRepo = require('../helpers/github.js');
-const saveToDb = require('../database/index.js')
+const { getReposByUsername } = require('../helpers/github.js');
+const { saveToDb } = require('../database/index.js');
 
 let app = express();
 
@@ -16,12 +16,13 @@ app.post('/repos', function (req, res) {
   let username = req.body.username;
   // console.log(username);
   // get repos by username
-  getRepo.getReposByUsername(username);
-  // iterate through repos
-  // save information onto database
-  // saveToDb.save();
-
-  // res.send to end POST request
+  getReposByUsername(username)
+    .then((results) => {
+      let data = results.data
+      for (let i = 0; i < data.length; i++) {
+        saveToDb(data[i]);
+      }
+    })
   res.send()
 });
 
