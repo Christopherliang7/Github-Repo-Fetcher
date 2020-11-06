@@ -1,6 +1,6 @@
 const express = require('express');
 const { getReposByUsername } = require('../helpers/github.js');
-const { saveToDb } = require('../database/index.js');
+const { save, retrieve } = require('../database/index.js');
 
 let app = express();
 
@@ -20,7 +20,7 @@ app.post('/repos', function (req, res) {
     .then((results) => {
       let data = results.data
       for (let i = 0; i < data.length; i++) {
-        saveToDb(data[i]);
+        save(data[i]);
       }
     })
   res.send()
@@ -29,7 +29,12 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
-
+  retrieve().then((repos) => {
+    console.log(repos)
+    res.status(200).send(repos)
+  }).catch((err) => {
+    res.sendStatus(500);
+  })
 });
 
 let port = 1128;

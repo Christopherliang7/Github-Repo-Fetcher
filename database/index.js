@@ -16,7 +16,7 @@ let repoSchema = mongoose.Schema({
 // once schema is created - compile schema into a model
 let Repo = mongoose.model('Repo', repoSchema);
 
-let saveToDb = (repo) => {
+let save = (repo) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
@@ -26,13 +26,25 @@ let saveToDb = (repo) => {
   // save this repo into mongo database
   console.log('Save function in progress!');
   console.log('Save is running on: ', repo);
-
+  // Repo.findOneAndUpdate({
+  //   {link: repo.url},
+  //   {
+  //     id: repo.id,
+  //     repo_name: repo.name,
+  //     owner_name: repo.owner.login,
+  //     owner_id: repo.owner.id,
+  //     link: repo.url;
+  //     description: repo.description,
+  //     forks: repo.forks
+  //   },
+  //   {upsert: true}
+  // })
   let newRepo = new Repo({
     id: repo.id,
     repo_name: repo.name,
     owner_name: repo.owner.login,
     owner_id: repo.owner.id,
-    url: repo.owner.url,
+    link: {type: repo.url, unique: true},
     description: repo.description,
     forks: repo.forks
   });
@@ -49,4 +61,9 @@ let saveToDb = (repo) => {
   })
 }
 
-module.exports.saveToDb = saveToDb;
+let retrieve = () => {
+  return Repo.find().sort('-forks').limit(2).exec();
+}
+
+module.exports.save = save;
+module.exports.retrieve = retrieve;
